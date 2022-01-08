@@ -17,9 +17,11 @@ public struct Descriptor: Equatable {
     public var value: Value?
     
     init(from descriptor: CBDescriptor) {
+        guard let parentCharacteristic = descriptor.characteristic else { fatalError() }
+        
         rawValue = descriptor
         identifier = descriptor.uuid
-        characteristic = Characteristic(from: descriptor.characteristic)
+        characteristic = Characteristic(from: parentCharacteristic)
         value = Self.anyToValue(uuid: identifier, descriptor.value)
     }
     

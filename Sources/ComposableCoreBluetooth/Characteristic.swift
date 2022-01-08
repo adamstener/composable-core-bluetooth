@@ -21,9 +21,11 @@ public struct Characteristic {
     public var isNotifying: Bool
 
     init(from characteristic: CBCharacteristic) {
+        guard let parentService = characteristic.service else { fatalError() }
+
         rawValue = characteristic
         identifier = characteristic.uuid
-        service = Service(from: characteristic.service)
+        service = Service(from: parentService)
         properties = characteristic.properties
         value = characteristic.value
         descriptors = characteristic.descriptors?.map(Descriptor.init) ?? []

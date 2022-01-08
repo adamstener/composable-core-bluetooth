@@ -18,7 +18,10 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", .exact("0.18.0"))
+        .package(
+            url: "https://github.com/pointfreeco/swift-composable-architecture",
+            .upToNextMajor(from: Version(0, 33, 0))
+        )
     ],
     targets: [
         .target(
