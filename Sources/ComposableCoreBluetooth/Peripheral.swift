@@ -55,8 +55,19 @@ public enum Peripheral {
         #endif
     }
     
-    public struct Environment {
+    public struct Environment: Identifiable, Hashable {
+        public static func == (
+            lhs: Peripheral.Environment,
+            rhs: Peripheral.Environment
+        ) -> Bool {
+            return lhs.id == rhs.id
+        }
         
+        public func hash(into hasher: inout Hasher) {
+            hasher.combine(id)
+        }
+        
+        public let id: UUID
         var rawValue: CBPeripheral?
         var delegate: CBPeripheralDelegate?
         var stateCancelable: AnyCancellable?
@@ -91,6 +102,7 @@ public enum Peripheral {
             openL2CAPChannel: @escaping (CBL2CAPPSM) -> Effect<Never, Never> = { _ in _unimplemented("openL2CAPChannel") },
             maximumWriteValueLength: @escaping (CBCharacteristicWriteType) -> Int = { _ in _unimplemented("maximumWriteValueLength") }
         ) {
+            self.id = rawValue?.identifier ?? UUID()
             self.rawValue = rawValue
             self.delegate = delegate
             self.stateCancelable = stateCancelable
